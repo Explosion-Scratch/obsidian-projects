@@ -7,15 +7,18 @@
     Select,
     TextInput,
     NumberInput,
+    DateInput,
   } from "obsidian-svelte";
   import HorizontalGroup from "src/components/HorizontalGroup/HorizontalGroup.svelte";
   import { DataFieldType, type DataField } from "src/lib/data";
   import {
     filterOperatorTypes,
+    isDateFilterOperator,
     isNumberFilterOperator,
     isStringFilterOperator,
     type BaseFilterOperator,
     type BooleanFilterOperator,
+    type DateFilterOperator,
     type FilterDefinition,
     type FilterOperator,
     type NumberFilterOperator,
@@ -144,6 +147,15 @@
           { label: "≥", value: "gte" },
         ];
         return [...baseOperators, ...numberOps];
+      case DataFieldType.Date:
+        const dateOps: Array<{
+          label: string;
+          value: DateFilterOperator;
+        }> = [
+          { label: "is before", value: "is-before" },
+          { label: "is after", value: "is-after" },
+        ];
+        return [...baseOperators, ...dateOps];
     }
 
     return baseOperators;
@@ -175,6 +187,11 @@
           />
         {:else if isNumberFilterOperator(condition.operator)}
           <NumberInput
+            value={parseFloat(condition.value ?? "")}
+            on:blur={handleValueChange(i)}
+          />
+        {:else if isDateFilterOperator(condition.operator)}
+          <DateInput
             value={parseFloat(condition.value ?? "")}
             on:blur={handleValueChange(i)}
           />

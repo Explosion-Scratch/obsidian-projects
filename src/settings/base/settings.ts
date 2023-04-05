@@ -39,6 +39,14 @@ export function isStringFilterOperator(
   return ["is", "is-not", "contains", "not-contains"].includes(op);
 }
 
+export type DateFilterOperator = "is-before" | "is-after";
+
+export function isDateFilterOperator(
+  op: FilterOperator
+): op is DateFilterOperator {
+  return ["is-before", "is-after"].includes(op);
+}
+
 export type NumberFilterOperator = "eq" | "neq" | "lt" | "gt" | "lte" | "gte";
 
 export function isNumberFilterOperator(
@@ -59,7 +67,8 @@ export type FilterOperator =
   | BaseFilterOperator
   | StringFilterOperator
   | NumberFilterOperator
-  | BooleanFilterOperator;
+  | BooleanFilterOperator
+  | DateFilterOperator;
 
 export type FilterOperatorType = "unary" | "binary";
 
@@ -78,6 +87,8 @@ export const filterOperatorTypes: Record<FilterOperator, FilterOperatorType> = {
   gte: "binary",
   "is-checked": "unary",
   "is-not-checked": "unary",
+  "is-after": "binary",
+  "is-before": "binary",
 };
 
 export interface FilterCondition {
